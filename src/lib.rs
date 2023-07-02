@@ -14,6 +14,7 @@ use atomic_float::AtomicF32;
 macro_rules! impls {
     ($name:ident: $atomic:ident, $inner:ty) => {
         /// A Wrapper around a atomic value, that always uses `Ordering::Relaxed` for access.
+        #[cfg_attr(feature="serde", derive(serde::Serialize, serde::Deserialize))]
         #[derive(Default)]
         #[repr(transparent)]
         pub struct $name($atomic);
