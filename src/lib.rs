@@ -14,7 +14,6 @@ use atomic_float::AtomicF32;
 macro_rules! impls {
     ($name:ident: $atomic:ident, $inner:ty) => {
         /// A Wrapper around a atomic value, that always uses `Ordering::Relaxed` for access.
-        #[cfg_attr(feature="serde", derive(serde::Serialize, serde::Deserialize))]
         #[derive(Default)]
         #[repr(transparent)]
         pub struct $name($atomic);
@@ -52,6 +51,27 @@ macro_rules! impls {
         impl From<$inner> for $name {
             fn from(val: $inner) -> Self {
                 $name::new(val)
+            }
+        }
+
+        #[cfg(feature="serde")]
+        impl serde::Serialize for $name {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: serde::Serializer,
+            {
+                // Matches the atomic ordering used in libcore for the Debug impl
+                self.0.load(Ordering::Relaxed).serialize(serializer)
+            }
+        }
+
+        #[cfg(feature="serde")]
+        impl<'de> serde::Deserialize<'de> for $name {
+            fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                serde::Deserialize::deserialize(deserializer).map(Self::new)
             }
         }
     };
