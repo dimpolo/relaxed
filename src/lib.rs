@@ -4,7 +4,7 @@
 #![warn(missing_docs)]
 #![feature(atomic_bool_fetch_not)]
 
-use core::fmt::{Debug, Formatter};
+use core::fmt::{Debug, Formatter, Display};
 use core::sync::atomic::{
     AtomicBool, AtomicI16, AtomicI32, AtomicI8, AtomicU16, AtomicU32, AtomicU8, Ordering,
 };
@@ -43,6 +43,12 @@ macro_rules! impls {
         }
 
         impl Debug for $name {
+            fn fmt(&self, f: &mut Formatter<'_>) -> core::fmt::Result {
+                self.0.fmt(f)
+            }
+        }
+
+        impl Display for $name {
             fn fmt(&self, f: &mut Formatter<'_>) -> core::fmt::Result {
                 self.0.fmt(f)
             }
