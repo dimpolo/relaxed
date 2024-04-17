@@ -6,8 +6,8 @@ license = "MIT OR Apache-2.0"
 repository = "https://github.com/dimpolo/relaxed/"
 
 [dependencies]
-atomic_float = { git = "https://github.com/dimpolo/atomic_float.git", branch = "serde", default_features = false }
-serde = { version = "1.0.163", default-features = false, features = ["derive"], optional = true }
+atomic_float = { git = "https://github.com/dimpolo/atomic_float.git", branch = "dev", default_features = false }
+serde = { version = "1.0.198", default-features = false, features = ["derive"], optional = true }
 
 [features]
 serde = ["dep:serde", "atomic_float/serde"]
