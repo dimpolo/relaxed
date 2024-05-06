@@ -1,8 +1,21 @@
 //! Wrappers around Atomics that always use `Ordering::Relaxed`
+//!
+//! ```
+//! // instead of:
+//! use std::sync::atomic::{AtomicBool, Ordering};
+//! let atomic = AtomicBool::new(false);
+//! atomic.store(true, Ordering::Relaxed);
+//! assert_eq!(atomic.load(Ordering::Relaxed), true);
+//!
+//! // you can do:
+//! use relaxed::RelaxedBool;
+//! let atomic = RelaxedBool::new(false);
+//! atomic.set(true);
+//! assert_eq!(atomic.get(), true);
+//! ```
 
 #![no_std]
 #![warn(missing_docs)]
-#![feature(atomic_bool_fetch_not)]
 
 use core::fmt::{Debug, Formatter, Display};
 use core::sync::atomic::{
@@ -36,6 +49,7 @@ macro_rules! impls {
                 self.0.store(val, Ordering::Relaxed)
             }
             /// Calls `f` with the current value and stores the value returned by `f`.
+            /// **The update is not atomic.**
             #[inline(always)]
             pub fn update(&self, f: impl FnOnce($inner) -> $inner) {
                 self.set(f(self.get()))
