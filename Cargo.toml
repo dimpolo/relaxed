@@ -8,7 +8,7 @@ categories = ["concurrency", "no-std::no-alloc", "rust-patterns"]
 keywords = ["atomic", "relaxed"]
 
 [dependencies]
-atomic_float = { version = "1.0.0", default_features = false }
+atomic_float = { version = "1.0.0", default-features = false }
 serde = { version = "1.0.198", default-features = false, features = ["derive"], optional = true }
 
 [features]
