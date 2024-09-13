@@ -112,6 +112,7 @@ impls!(RelaxedF32: AtomicF32, f32);
 impl RelaxedBool {
     /// Performs a logical "not" operation on the current value, and sets the new value to the result.
     /// Returns the previous value.
+    #[cfg(target_has_atomic = "8")]
     pub fn fetch_not(&self) -> bool {
         self.0.fetch_not(Ordering::Relaxed)
     }
